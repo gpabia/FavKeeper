@@ -14,51 +14,72 @@ class ImagePickerViewController: UIViewController {
     let reuseIdentifier = "imageCell"
 
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var activity: UIActivityIndicatorView!
 
     private var assets: PHFetchResult<PHAsset>?
     var assetCollection = PHAssetCollection()
     private var sideSize: CGFloat!
-
+    private var arrayToDelete: NSArray = NSArray()
+    private var indexArray: [IndexPath] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setCollectionView()
+        self.activity.alpha = 0
+        self.activity.stopAnimating()
         // Do any additional setup after loading the view.
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        if PHPhotoLibrary.authorizationStatus() == .authorized {
-            reloadAssets()
-        } else {
-            PHPhotoLibrary.requestAuthorization({ (status: PHAuthorizationStatus) -> Void in
-                if status == .authorized {
-                    self.reloadAssets()
-                }
-            })
-        }
+        reloadAssets()
     }
+
+    @IBAction func deleteSelection(_ sender: AnyObject) {
+        PHPhotoLibrary.shared().performChanges( {
+            PHAssetChangeRequest.deleteAssets(self.arrayToDelete)}, completionHandler: {
+                success, error in
+
+                if error == nil {
+                    DispatchQueue.main.async {
+                        let _ = self.navigationController?.popToRootViewController(animated: true)
+                    }
+                    self.activity.stopAnimating()
+                    NSLog("Finished deleting asset. %@")
+                }
+        })
+    }
+
 
     private func reloadAssets() {
         assets = nil
         collectionView.reloadData()
-        let options = PHFetchOptions()
-        options.includeAssetSourceTypes = .typeUserLibrary
-        options.predicate = Predicate(format: "isFavorite == 0")
-        assets = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+        let fetchOptions: PHFetchOptions = PHFetchOptions()
+        fetchOptions.predicate = Predicate(format: "isFavorite == 0")
+        fetchOptions.sortDescriptors = [SortDescriptor(key: "creationDate", ascending: true)]
+        assets = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions)
+        guard let count = assets?.count else {
+            NSLog("error count")
+            return
+        }
+        for i in 0...count-1 {
+            guard let asset = assets?[i] else {
+                NSLog("no asset")
+                return
+            }
+            self.arrayToDelete = self.arrayToDelete.adding(asset)
+        }
         collectionView.reloadData()
-        NSLog("assets: \(assets)")
+    }
 
 
-        let collection:PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: nil)
 
-        if let first_Obj:AnyObject = collection.firstObject{
-            //found the album
-            assetCollection = first_Obj as! PHAssetCollection
+    @IBAction func selectAllAction(_ sender: AnyObject) {
+        for index in 0...self.collectionView.numberOfItems(inSection: 0)-1 {
+            self.addToDeleteAssets(index: index)
         }
 
-        NSLog("asset collectollection : \(assetCollection)")
-
+        self.collectionView.reloadData()
     }
 
 }
@@ -70,9 +91,13 @@ extension ImagePickerViewController: UICollectionViewDelegate, UICollectionViewD
         self.collectionView.delegate = self
     }
 
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return assets!.count
+        return assets?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -82,68 +107,34 @@ extension ImagePickerViewController: UICollectionViewDelegate, UICollectionViewD
             NSLog("no assets error")
             return cell
         }
-        //        NSLog("count: \(assets.count)")
         let asset = assets[indexPath.row]
-
-
-
-
-
-
-        PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 100,height: 40), contentMode: .aspectFill, options: nil) { (image: UIImage?, info: [NSObject : AnyObject]?) -> Void in
+        PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 100,height: 100), contentMode: .aspectFill, options: nil) { (image: UIImage?, info: [NSObject : AnyObject]?) -> Void in
             cell.imageView.image = image
         }
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        var vari: [PHAsset] = []
-        let ass = assets![indexPath.row]
-        vari.append(ass)
-        deleteAss()
-
-        PHPhotoLibrary.shared().performChanges({
-            // Create a change request from the asset to be modified.
-            let request = PHAssetCollectionChangeRequest(for: self.assetCollection)
-            // Set a property of the request to change the asset itself.
-
-            request?.removeAssets(vari)
-
-            }, completionHandler: { success, error in
-                NSLog("Finished updating asset")
-        })
-
-        PHPhotoLibrary.shared().performChanges({
-//            PHAssetChangeRequest.deleteAssets(ass)
-            }, completionHandler: nil)
-        NSLog("finish")
+        addToDeleteAssets(index: indexPath.row)
+        NSLog("indexpath: \(indexPath)")
+        guard let _ = collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell else {
+            NSLog("error cell selected nil")
+            return
+        }
     }
 
 
-    func deleteAss(){
-        let fetchOptions: PHFetchOptions = PHFetchOptions()
-        fetchOptions.predicate = Predicate(format: "isFavorite == 0")
-        fetchOptions.sortDescriptors = [SortDescriptor(key: "creationDate", ascending: true)]
-
-        let fetchResult = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions)
-
-        if (fetchResult.lastObject != nil) {
-            let lastAsset: PHAsset = fetchResult.lastObject! as PHAsset
-            let first = fetchResult.firstObject! as PHAsset
-
-//            let arr: [PHAsset] = [first,lastAsset]
-
-            var arrayToDelete = NSArray(object: first)
-            arrayToDelete = arrayToDelete.adding(lastAsset)
-            PHPhotoLibrary.shared().performChanges( {
-                PHAssetChangeRequest.deleteAssets(arrayToDelete)}, completionHandler: {
-                    success, error in
-                    NSLog("Finished deleting asset. %@")
-            })
-            
-            
-            
+    func addToDeleteAssets(index: Int){
+        let thisAsset = assets?.object(at: index)
+        let path = IndexPath(row: index, section: 0)
+        guard let cell = self.collectionView.cellForItem(at: path) else {
+            NSLog("error")
+            return
         }
+        cell.layer.borderWidth = 4.0
+        cell.layer.borderColor = UIColor.orange().cgColor
+        indexArray.append(path)
+        self.arrayToDelete = arrayToDelete.adding(thisAsset!)
     }
     
 }

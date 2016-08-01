@@ -6,6 +6,7 @@
 //  Copyright © 2016 gpabia. All rights reserved.
 //
 
+import Photos
 import UIKit
 
 class ViewController: UIViewController {
@@ -28,10 +29,21 @@ class ViewController: UIViewController {
 
 
     @IBAction func pickImageButton(_ sender: AnyObject) {
-        if let imagePickerVC = self.storyboard?.instantiateViewController(withIdentifier: "ImagePickerViewController") as? ImagePickerViewController {
-            self.navigationController?.pushViewController(imagePickerVC, animated: true)
+        if PHPhotoLibrary.authorizationStatus() == .authorized {
+            if let imagePickerVC = self.storyboard?.instantiateViewController(withIdentifier: "ImagePickerViewController") as? ImagePickerViewController {
+                self.navigationController?.pushViewController(imagePickerVC, animated: true)
+            }
+        } else {
+            PHPhotoLibrary.requestAuthorization({ (status: PHAuthorizationStatus) -> Void in
+                if status == .authorized {
+                    if let imagePickerVC = self.storyboard?.instantiateViewController(withIdentifier: "ImagePickerViewController") as? ImagePickerViewController {
+                        self.navigationController?.pushViewController(imagePickerVC, animated: true)
+                    }
+                }
+            })
         }
+        
     }
-
+    
 }
 
