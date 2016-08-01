@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11143.2"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -35,20 +36,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LjG-Xc-oHX">
-                                <state key="normal" title="Select all your non favorite image"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="35"/>
+                                <state key="normal" title="Start cleaning !">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
                                 <connections>
                                     <action selector="pickImageButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4rf-p1-tv9"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="1" green="0.43699597940000001" blue="0.24195405889999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="LjG-Xc-oHX" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="5Pe-JF-hrK"/>
                             <constraint firstItem="LjG-Xc-oHX" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="5z5-h0-1ze"/>
-                            <constraint firstItem="LjG-Xc-oHX" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="NdK-gu-Yhx"/>
+                            <constraint firstItem="LjG-Xc-oHX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="97E-CB-9Sq"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="HJr-zq-Smx"/>
+                    <connections>
+                        <outlet property="pickButton" destination="LjG-Xc-oHX" id="z6m-Jy-rjd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -82,9 +89,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="17h-MG-meO">
-                                                    <frame key="frameInset" width="75" height="75"/>
-                                                </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="17h-MG-meO"/>
                                             </subviews>
                                         </view>
                                         <constraints>
@@ -107,31 +112,32 @@
                                         <color key="textColor" red="0.96903275804289546" green="0.94437829531589335" blue="0.95021725449878225" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vx7-Ms-8eE">
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="25"/>
+                                        <state key="normal" title="Back"/>
+                                        <connections>
+                                            <action selector="backButton:" destination="NBK-1t-wFc" eventType="touchUpInside" id="hPk-4n-Kvu"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="0.4369959794089332" blue="0.24195405886323573" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="tPV-M5-qRf" firstAttribute="centerX" secondItem="M1Q-vi-zaT" secondAttribute="centerX" id="Ffn-eu-Fp4"/>
                                     <constraint firstAttribute="height" constant="80" id="YTa-SY-GU3"/>
+                                    <constraint firstItem="Vx7-Ms-8eE" firstAttribute="baseline" secondItem="tPV-M5-qRf" secondAttribute="baseline" id="jQw-Ho-mHU"/>
                                     <constraint firstItem="tPV-M5-qRf" firstAttribute="top" secondItem="M1Q-vi-zaT" secondAttribute="top" constant="25" id="sd5-SB-Hk3"/>
+                                    <constraint firstItem="Vx7-Ms-8eE" firstAttribute="leading" secondItem="M1Q-vi-zaT" secondAttribute="leading" constant="15" id="wM6-jg-AJk"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w8g-rI-edP">
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nby-JH-RNr">
                                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="30"/>
-                                        <state key="normal" title="delete">
+                                        <state key="normal" title="delete all">
                                             <color key="titleColor" red="0.96903275799999999" green="0.94437829529999995" blue="0.95021725450000005" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="deleteSelection:" destination="NBK-1t-wFc" eventType="touchUpInside" id="7yd-6s-FuC"/>
-                                        </connections>
-                                    </button>
-                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4d-0l-VVg">
-                                        <frame key="frameInset" minX="175" minY="8" width="46" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="select"/>
-                                        <connections>
-                                            <action selector="selectAllAction:" destination="NBK-1t-wFc" eventType="touchUpInside" id="BT5-ao-cbO"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -168,6 +174,52 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7nU-KP-02X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="832.79999999999995" y="138.98050974512745"/>
+        </scene>
+        <!--End View Controller-->
+        <scene sceneID="Yb7-Qx-POM">
+            <objects>
+                <viewController storyboardIdentifier="EndViewController" id="Xhy-in-cn5" customClass="EndViewController" customModule="FavKeeper" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dmT-x0-PXW"/>
+                        <viewControllerLayoutGuide type="bottom" id="Hyn-nw-swG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="aWW-KA-Wlr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Success ! " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R4q-Us-t3h">
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="27"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nhp-pT-JQn">
+                                <color key="backgroundColor" red="1" green="0.43699597940000001" blue="0.24195405889999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="1" green="0.43699597940000001" blue="0.24195405889999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Back to menu">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="8"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="2"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.borderColor" value="UIColor.white()"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="endAction:" destination="Xhy-in-cn5" eventType="touchUpInside" id="KUz-7j-Ne4"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="0.43699597940000001" blue="0.24195405889999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="nhp-pT-JQn" firstAttribute="top" secondItem="R4q-Us-t3h" secondAttribute="bottom" constant="30" id="X1g-Do-x5u"/>
+                            <constraint firstItem="nhp-pT-JQn" firstAttribute="centerX" secondItem="aWW-KA-Wlr" secondAttribute="centerX" id="buQ-xE-RYy"/>
+                            <constraint firstItem="R4q-Us-t3h" firstAttribute="centerX" secondItem="aWW-KA-Wlr" secondAttribute="centerX" id="mF9-6A-NGe"/>
+                            <constraint firstItem="R4q-Us-t3h" firstAttribute="centerY" secondItem="aWW-KA-Wlr" secondAttribute="centerY" constant="-100" id="mSN-PL-FC3"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EjX-Ov-uyL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1542" y="139"/>
         </scene>
     </scenes>
 </document>

@@ -14,9 +14,14 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var firstImageView: UIImageView!
     @IBOutlet weak var secondImageView: UIImageView!
+    @IBOutlet weak var pickButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.pickButton.layer.borderColor = UIColor.white().cgColor
+        self.pickButton.layer.borderWidth = 2
+        self.pickButton.layer.cornerRadius = 15
+        self.pickButton.tintColor = UIColor.white()
         // Do any additional setup after loading the view, typically from a nib.
     }
 

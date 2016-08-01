@@ -42,7 +42,9 @@ class ImagePickerViewController: UIViewController {
 
                 if error == nil {
                     DispatchQueue.main.async {
-                        let _ = self.navigationController?.popToRootViewController(animated: true)
+                        if let endVC = self.storyboard?.instantiateViewController(withIdentifier: "EndViewController") {
+                            self.navigationController?.pushViewController(endVC, animated: true)
+                        }
                     }
                     self.activity.stopAnimating()
                     NSLog("Finished deleting asset. %@")
@@ -50,6 +52,9 @@ class ImagePickerViewController: UIViewController {
         })
     }
 
+    @IBAction func backButton(_ sender: AnyObject) {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
 
     private func reloadAssets() {
         assets = nil
@@ -62,25 +67,35 @@ class ImagePickerViewController: UIViewController {
             NSLog("error count")
             return
         }
+
+        if count-1 > 0 {
         for i in 0...count-1 {
             guard let asset = assets?[i] else {
                 NSLog("no asset")
                 return
             }
             self.arrayToDelete = self.arrayToDelete.adding(asset)
+            }
+        } else {
+            NSLog("error")
+            let label = UILabel(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 200, height: 200)))
+            label.text = "You don't have any picture which isn't favorite"
+            label.numberOfLines = 0
+            label.textAlignment = .center
+            self.collectionView.backgroundView = label
         }
         collectionView.reloadData()
     }
 
 
 
-    @IBAction func selectAllAction(_ sender: AnyObject) {
-        for index in 0...self.collectionView.numberOfItems(inSection: 0)-1 {
-            self.addToDeleteAssets(index: index)
-        }
-
-        self.collectionView.reloadData()
-    }
+//    @IBAction func selectAllAction(_ sender: AnyObject) {
+//        for index in 0...self.collectionView.numberOfItems(inSection: 0)-1 {
+//            self.addToDeleteAssets(index: index)
+//        }
+//
+//        self.collectionView.reloadData()
+//    }
 
 }
 

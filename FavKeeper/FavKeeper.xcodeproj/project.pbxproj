@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F013F3021D4FCF3E00BB9D28 /* EndViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F013F3011D4FCF3E00BB9D28 /* EndViewController.swift */; };
 		F0C99C7A1D4CBC2900208C91 /* ImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C99C791D4CBC2900208C91 /* ImagePickerViewController.swift */; };
 		F0C99C7C1D4CBD2F00208C91 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C99C7B1D4CBD2F00208C91 /* ImageCollectionViewCell.swift */; };
 		F0ED372B1D4CB991000FEC2C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0ED372A1D4CB991000FEC2C /* AppDelegate.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F013F3011D4FCF3E00BB9D28 /* EndViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndViewController.swift; sourceTree = "<group>"; };
 		F0C99C791D4CBC2900208C91 /* ImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerViewController.swift; sourceTree = "<group>"; };
 		F0C99C7B1D4CBD2F00208C91 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		F0ED37271D4CB991000FEC2C /* FavKeeper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FavKeeper.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,6 +68,7 @@
 				F0ED37361D4CB991000FEC2C /* Info.plist */,
 				F0C99C791D4CBC2900208C91 /* ImagePickerViewController.swift */,
 				F0C99C7B1D4CBD2F00208C91 /* ImageCollectionViewCell.swift */,
+				F013F3011D4FCF3E00BB9D28 /* EndViewController.swift */,
 			);
 			path = FavKeeper;
 			sourceTree = "<group>";
@@ -145,6 +148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0C99C7A1D4CBC2900208C91 /* ImagePickerViewController.swift in Sources */,
+				F013F3021D4FCF3E00BB9D28 /* EndViewController.swift in Sources */,
 				F0ED372D1D4CB991000FEC2C /* ViewController.swift in Sources */,
 				F0C99C7C1D4CBD2F00208C91 /* ImageCollectionViewCell.swift in Sources */,
 				F0ED372B1D4CB991000FEC2C /* AppDelegate.swift in Sources */,
