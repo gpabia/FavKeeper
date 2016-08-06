@@ -23,17 +23,7 @@ class ViewController: UIViewController {
         self.pickButton.layer.cornerRadius = 15
         self.pickButton.tintColor = UIColor.whiteColor()
         // Do any additional setup after loading the view, typically from a nib.
-    }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
-
-
-    @IBAction func pickImageButton(sender: AnyObject) {
         if PHPhotoLibrary.authorizationStatus() == .Authorized {
             if let imagePickerVC = self.storyboard?.instantiateViewControllerWithIdentifier("ImagePickerViewController") as? ImagePickerViewController {
                 self.navigationController?.pushViewController(imagePickerVC, animated: true)
@@ -47,8 +37,23 @@ class ViewController: UIViewController {
                 }
             })
         }
-        
+
     }
-    
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+
+
+
+    @IBAction func pickImageButton(sender: AnyObject) {
+        if let imagePickerVC = self.storyboard?.instantiateViewControllerWithIdentifier("ImagePickerViewController") as? ImagePickerViewController {
+            self.navigationController?.pushViewController(imagePickerVC, animated: true)
+        }
+
+    }
+
 }
 

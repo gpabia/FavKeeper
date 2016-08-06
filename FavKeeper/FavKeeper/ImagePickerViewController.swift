@@ -46,8 +46,7 @@ class ImagePickerViewController: UIViewController {
                             self.navigationController?.pushViewController(endVC, animated: true)
                         }
                     })
-                    self.activity.stopAnimating()
-                    NSLog("Finished deleting asset. %@")
+                    NSLog("Finished deleting asset")
                 }
         })
     }
