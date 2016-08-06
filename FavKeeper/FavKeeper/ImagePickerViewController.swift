@@ -16,11 +16,11 @@ class ImagePickerViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activity: UIActivityIndicatorView!
 
-    private var assets: PHFetchResult<PHAsset>?
+    private var assets: PHFetchResult?
     var assetCollection = PHAssetCollection()
     private var sideSize: CGFloat!
     private var arrayToDelete: NSArray = NSArray()
-    private var indexArray: [IndexPath] = []
+    private var indexArray: [NSIndexPath] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,39 +30,39 @@ class ImagePickerViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         reloadAssets()
     }
 
-    @IBAction func deleteSelection(_ sender: AnyObject) {
-        PHPhotoLibrary.shared().performChanges( {
+    @IBAction func deleteSelection(sender: AnyObject) {
+        PHPhotoLibrary.sharedPhotoLibrary().performChanges( {
             PHAssetChangeRequest.deleteAssets(self.arrayToDelete)}, completionHandler: {
                 success, error in
 
                 if error == nil {
-                    DispatchQueue.main.async {
-                        if let endVC = self.storyboard?.instantiateViewController(withIdentifier: "EndViewController") {
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        if let endVC = self.storyboard?.instantiateViewControllerWithIdentifier("EndViewController") {
                             self.navigationController?.pushViewController(endVC, animated: true)
                         }
-                    }
+                    })
                     self.activity.stopAnimating()
                     NSLog("Finished deleting asset. %@")
                 }
         })
     }
 
-    @IBAction func backButton(_ sender: AnyObject) {
-        self.navigationController?.popToRootViewController(animated: true)
+    @IBAction func backButton(sender: AnyObject) {
+        _ = self.navigationController?.popToRootViewControllerAnimated(true)
     }
 
     private func reloadAssets() {
         assets = nil
         collectionView.reloadData()
         let fetchOptions: PHFetchOptions = PHFetchOptions()
-        fetchOptions.predicate = Predicate(format: "isFavorite == 0")
-        fetchOptions.sortDescriptors = [SortDescriptor(key: "creationDate", ascending: true)]
-        assets = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions)
+        fetchOptions.predicate = NSPredicate(format: "isFavorite == 0")
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        assets = PHAsset.fetchAssetsWithMediaType(.Image, options: fetchOptions)
         guard let count = assets?.count else {
             NSLog("error count")
             return
@@ -74,28 +74,19 @@ class ImagePickerViewController: UIViewController {
                 NSLog("no asset")
                 return
             }
-            self.arrayToDelete = self.arrayToDelete.adding(asset)
+            self.arrayToDelete = self.arrayToDelete.arrayByAddingObject(asset)
             }
         } else {
             NSLog("error")
             let label = UILabel(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: 200, height: 200)))
             label.text = "You don't have any picture which isn't favorite"
             label.numberOfLines = 0
-            label.textAlignment = .center
+            label.textAlignment = .Center
             self.collectionView.backgroundView = label
         }
         collectionView.reloadData()
     }
 
-
-
-//    @IBAction func selectAllAction(_ sender: AnyObject) {
-//        for index in 0...self.collectionView.numberOfItems(inSection: 0)-1 {
-//            self.addToDeleteAssets(index: index)
-//        }
-//
-//        self.collectionView.reloadData()
-//    }
 
 }
 
@@ -111,28 +102,29 @@ extension ImagePickerViewController: UICollectionViewDelegate, UICollectionViewD
     }
 
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return assets?.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ImageCollectionViewCell
-        cell.imageView.backgroundColor = UIColor.red()
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! ImageCollectionViewCell
+        cell.imageView.backgroundColor = UIColor.redColor()
         guard let assets = assets else {
             NSLog("no assets error")
             return cell
         }
         let asset = assets[indexPath.row]
-        PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 100,height: 100), contentMode: .aspectFill, options: nil) { (image: UIImage?, info: [NSObject : AnyObject]?) -> Void in
+        PHImageManager.defaultManager().requestImageForAsset(asset as! PHAsset, targetSize: CGSize(width: 100,height: 100), contentMode: .AspectFit, options: nil) { (image, _: [NSObject : AnyObject]?) in
             cell.imageView.image = image
         }
+
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        addToDeleteAssets(index: indexPath.row)
+    func collectionView(collectionView: UICollectionView, didSelectItemAt indexPath: NSIndexPath) {
+        addToDeleteAssets(indexPath.row)
         NSLog("indexpath: \(indexPath)")
-        guard let _ = collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell else {
+        guard let _ = collectionView.cellForItemAtIndexPath(indexPath) as? ImageCollectionViewCell else {
             NSLog("error cell selected nil")
             return
         }
@@ -140,16 +132,16 @@ extension ImagePickerViewController: UICollectionViewDelegate, UICollectionViewD
 
 
     func addToDeleteAssets(index: Int){
-        let thisAsset = assets?.object(at: index)
-        let path = IndexPath(row: index, section: 0)
-        guard let cell = self.collectionView.cellForItem(at: path) else {
+        let thisAsset = assets?.objectAtIndex(index)
+        let path = NSIndexPath(forRow: index, inSection: 0)
+        guard let cell = self.collectionView.cellForItemAtIndexPath(path) else {
             NSLog("error")
             return
         }
         cell.layer.borderWidth = 4.0
-        cell.layer.borderColor = UIColor.orange().cgColor
+        cell.layer.borderColor = UIColor.orangeColor().CGColor
         indexArray.append(path)
-        self.arrayToDelete = arrayToDelete.adding(thisAsset!)
+        self.arrayToDelete = arrayToDelete.arrayByAddingObject(thisAsset!)
     }
     
 }

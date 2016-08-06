@@ -18,10 +18,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.pickButton.layer.borderColor = UIColor.white().cgColor
+        self.pickButton.layer.borderColor = UIColor.whiteColor().CGColor
         self.pickButton.layer.borderWidth = 2
         self.pickButton.layer.cornerRadius = 15
-        self.pickButton.tintColor = UIColor.white()
+        self.pickButton.tintColor = UIColor.whiteColor()
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -33,15 +33,15 @@ class ViewController: UIViewController {
 
 
 
-    @IBAction func pickImageButton(_ sender: AnyObject) {
-        if PHPhotoLibrary.authorizationStatus() == .authorized {
-            if let imagePickerVC = self.storyboard?.instantiateViewController(withIdentifier: "ImagePickerViewController") as? ImagePickerViewController {
+    @IBAction func pickImageButton(sender: AnyObject) {
+        if PHPhotoLibrary.authorizationStatus() == .Authorized {
+            if let imagePickerVC = self.storyboard?.instantiateViewControllerWithIdentifier("ImagePickerViewController") as? ImagePickerViewController {
                 self.navigationController?.pushViewController(imagePickerVC, animated: true)
             }
         } else {
             PHPhotoLibrary.requestAuthorization({ (status: PHAuthorizationStatus) -> Void in
-                if status == .authorized {
-                    if let imagePickerVC = self.storyboard?.instantiateViewController(withIdentifier: "ImagePickerViewController") as? ImagePickerViewController {
+                if status == .Authorized {
+                    if let imagePickerVC = self.storyboard?.instantiateViewControllerWithIdentifier("ImagePickerViewController") as? ImagePickerViewController {
                         self.navigationController?.pushViewController(imagePickerVC, animated: true)
                     }
                 }

@@ -21,8 +21,8 @@ class EndViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func endAction(_ sender: AnyObject) {
-        self.navigationController?.popToRootViewController(animated: true)
+    @IBAction func endAction(sender: AnyObject) {
+        self.navigationController?.popToRootViewControllerAnimated(true)
     }
 
     /*
